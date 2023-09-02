@@ -5,6 +5,17 @@ type Base struct {
 	Message string `json:"message"`
 }
 
+func NewErrorEntityDefault() *Response {
+	base := Base{
+		Code:    "1001",
+		Message: "系统异常，请联系管理员",
+	}
+	return &Response{
+		base,
+		nil,
+	}
+}
+
 func NewErrorEntity(code string, message string) *Response {
 	base := Base{
 		Code:    code,
