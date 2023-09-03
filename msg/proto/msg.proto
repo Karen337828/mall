@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package msg;
+option go_package="./proto";
+
+message SendRequest {
+  //场景码[msg服务根据场景码使用不同的模板发送邮件/短信]
+  string sceneNo = 1;
+  //用户名
+  string userName = 2;
+  //邮箱
+  string email = 3;
+  //手机号码
+  string phone = 4;
+  //扩展字段
+  string ext = 5;
+}
+
+message SendResponse {
+  bool result = 1;
+}
+
+service Msg {
+  rpc sendMsg(SendRequest) returns (SendResponse){}
+}

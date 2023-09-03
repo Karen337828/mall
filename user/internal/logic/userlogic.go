@@ -9,11 +9,14 @@ import (
 	"github.com/ulule/deepcopier"
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/core/stores/redis"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"mall/user/database/sqlx/usermodel"
 	"mall/user/internal/models"
 	"mall/user/internal/svc"
 	"mall/user/internal/types"
 	"mall/user/internal/utils"
+	"mall/user/proto"
 	"strconv"
 	"strings"
 	"time"
@@ -103,8 +106,22 @@ func (l *UserLogic) Register(req *types.UserRegisterRequest) (resp *types.Respon
 		//设置到redis中
 		l.svcCtx.Redis.Setex(strconv.FormatInt(thisUser.Id, 10)+":token", u.Token, 60*60*2)
 		l.svcCtx.Redis.Setex(strconv.FormatInt(thisUser.Id, 10)+":user", string(userInfoByte), 60*60*2)
+
+		//发送注册邮件
+		go sendMsg("SE0001", u)
 	}
 	return resp, err
+}
+
+func sendMsg(sceneNo string, user models.User) {
+	//client := proto.NewMsgClient(l.svcCtx.RpcConn)
+
+	client := proto.NewMsgClient(GetGrpcConn())
+	msg, err := client.SendMsg(context.Background(), &proto.SendRequest{SceneNo: sceneNo, Phone: user.Phone, Email: user.Email, UserName: user.UserName})
+	if err != nil {
+		fmt.Println("err====", err)
+	}
+	fmt.Printf("发送信息 场景码[%s],用户名[%s],rpc调用结果[%s]", sceneNo, user.UserName, msg)
 }
 
 func (l *UserLogic) Login(req *types.UserLoginRequest) (resp *types.Response, err error) {
@@ -132,5 +149,16 @@ func (l *UserLogic) Login(req *types.UserLoginRequest) (resp *types.Response, er
 	l.svcCtx.Redis.Setex(strconv.FormatInt(user.Id, 10)+":token", u.Token, 60*60*2)
 	l.svcCtx.Redis.Setex(strconv.FormatInt(user.Id, 10)+":user", string(userInfoByte), 60*60*2)
 
+	//发送登录邮件
+	go sendMsg("SE0002", u)
+
 	return resp, nil
+}
+
+func GetGrpcConn() *grpc.ClientConn {
+	conn, err := grpc.Dial("127.0.0.1:9090", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		logx.Errorf("ddddddddddddddddddd")
+	}
+	return conn
 }

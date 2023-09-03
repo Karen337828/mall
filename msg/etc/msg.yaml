@@ -1,0 +1,25 @@
+Name: proto.rpc
+ListenOn: 0.0.0.0:8080
+Etcd:
+  Hosts:
+  - 127.0.0.1:2379
+  Key: proto.rpc
+
+Host: 127.0.0.1
+Port: 8888
+Timeout: 10000
+
+Redis:
+  Host: 127.0.0.1:6379
+
+Mysql:
+  Datasource: root:12345678@tcp(127.0.0.1:3306)/mall?charset=utf8mb4&parseTime=True&loc=Local
+
+Log:
+  ServiceName: user #服务名
+  Mode: console # console(终端),file(文件),volume(k8s挂载) 3种打印模式,一般k8s的话也采用console，然后收集控制台日志
+  Level: debug #debug,info,error,severe 日志输出等级
+  Path: ./logs # 如果Mode为file,log存储路径
+  Encoding: plain #json一行不好看,plain
+  Compress: True #几天的日志打压缩包
+  KeepDays: 7 #保留几天的日志

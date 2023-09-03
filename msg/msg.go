@@ -2,30 +2,46 @@ package main
 
 import (
 	"flag"
-	"fmt"
-
-	"mall/msg/internal/config"
-	"mall/msg/internal/handler"
-	"mall/msg/internal/svc"
-
 	"github.com/zeromicro/go-zero/core/conf"
-	"github.com/zeromicro/go-zero/rest"
+	"google.golang.org/grpc"
+	"log"
+	"mall/msg/internal/config"
+	"mall/msg/internal/logic"
+	"mall/msg/internal/task"
+	"mall/msg/proto"
+	"net"
 )
 
-var configFile = flag.String("f", "etc/msg-api.yaml", "the config file")
+var configFile = flag.String("f", "msg/etc/msg.yaml", "the config file")
 
 func main() {
+
 	flag.Parse()
+	conf.MustLoad(*configFile, &config.Conf)
 
-	var c config.Config
-	conf.MustLoad(*configFile, &c)
+	task.InitTask()
 
-	server := rest.MustNewServer(c.RestConf)
-	defer server.Stop()
+	listen, _ := net.Listen("tcp", "127.0.0.1:9090")
+	grpcServer := grpc.NewServer()
+	proto.RegisterMsgServer(grpcServer, &logic.Server{})
 
-	ctx := svc.NewServiceContext(c)
-	handler.RegisterHandlers(server, ctx)
+	err := grpcServer.Serve(listen)
+	if err != nil {
+		log.Fatal("启动失败")
+	}
 
-	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
-	server.Start()
+	//flag.Parse()
+	//
+	//var c config.Config
+	//conf.MustLoad(*configFile, &c)
+	//
+	//server := rest.MustNewServer(c.RestConf)
+	//defer server.Stop()
+	//
+	//ctx := svc.NewServiceContext(c)
+	//handler.RegisterHandlers(server, ctx)
+	//
+	//fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
+	//server.Start()
+
 }
