@@ -19,7 +19,7 @@ func main() {
 	flag.Parse()
 	conf.MustLoad(*configFile, &config.Conf)
 
-	task.InitTask()
+	go task.InitTask()
 
 	listen, _ := net.Listen("tcp", "127.0.0.1:9090")
 	grpcServer := grpc.NewServer()
