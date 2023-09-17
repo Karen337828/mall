@@ -152,6 +152,10 @@ func (l *UserLogic) Login(req *types.UserLoginRequest) (resp *types.Response, er
 	//发送登录邮件
 	go sendMsg("SE0002", u)
 
+	data, _ := json.Marshal(u)
+	utils.SendMQMsg(l.svcCtx.Config, "topic-msg", string(data))
+	//l.svcCtx.KqPusherClient.Push(string(data))
+
 	return resp, nil
 }
 

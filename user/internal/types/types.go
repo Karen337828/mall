@@ -12,6 +12,10 @@ type UserLoginRequest struct {
 	Password string `json:"password"`
 }
 
+type GetGoodsInfoRequest struct {
+	GoodsId string `json:"goodsId"`
+}
+
 type Response struct {
 	Base
 	Data interface{} `json:"data"`

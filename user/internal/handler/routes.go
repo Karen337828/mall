@@ -24,6 +24,18 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/login",
 				Handler: UserLogin(serverCtx),
 			},
+			{
+				//获取商品信息
+				Method:  http.MethodPost,
+				Path:    "/getGoodsInfo",
+				Handler: GetGoodsInfo(serverCtx),
+			},
+			{
+				//获取商品信息
+				Method:  http.MethodGet,
+				Path:    "/testPushMq",
+				Handler: TestPushMq(serverCtx),
+			},
 		},
 	)
 }

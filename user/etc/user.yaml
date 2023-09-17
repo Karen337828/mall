@@ -2,14 +2,25 @@ Name: user
 Host: 127.0.0.1
 Port: 8888
 Timeout: 10000
-Etcd:
-  - Hosts: 127.0.0.1:2379
+
+GoodsRpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: goods.rpc
 
 Redis:
   Host: 127.0.0.1:6379
 
 Mysql:
   Datasource: root:12345678@tcp(127.0.0.1:3306)/mall?charset=utf8mb4&parseTime=True&loc=Local
+
+KqPusherConf:
+  Brokers:
+    - 127.0.0.1:9092
+    - 127.0.0.1:9093
+    - 127.0.0.1:9094
+  Topic: topic-msg
 
 Log:
   ServiceName: user #服务名

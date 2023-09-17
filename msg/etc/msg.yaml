@@ -15,6 +15,19 @@ Redis:
 Mysql:
   Datasource: root:12345678@tcp(127.0.0.1:3306)/mall?charset=utf8mb4&parseTime=True&loc=Local
 
+#kq
+KqConsumerConf:
+  Name: msgcleaConsumer
+  Brokers:
+    - 127.0.0.1:9092
+    - 127.0.0.1:9093
+    - 127.0.0.1:9094
+  Group: msgConsumer
+  Topic: topic-msg
+  Offset: first
+  Consumers: 8
+  Processors: 8
+
 Log:
   ServiceName: user #服务名
   Mode: console # console(终端),file(文件),volume(k8s挂载) 3种打印模式,一般k8s的话也采用console，然后收集控制台日志

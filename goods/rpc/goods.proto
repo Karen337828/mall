@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package goods;
+option go_package="./goods";
+
+message Request {
+  string goodsId = 1;
+}
+
+message Response {
+  string gooodsId = 1;
+  string goodsName = 2;
+  string goodsRemark = 3;
+  double goodsPrice = 4;
+  int32 goodsNums = 5;
+  string goodsCategory = 6;
+}
+
+service Goods {
+  rpc GetGoodsInfo(Request) returns(Response);
+}

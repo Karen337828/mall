@@ -7,8 +7,6 @@ import (
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/rest"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 	"mall/user/internal/config"
 	"mall/user/internal/handler"
 	"mall/user/internal/svc"
@@ -31,12 +29,6 @@ func main() {
 	//加载日志配置
 	logx.MustSetup(c.Log)
 	logx.Infov("我是日志,测试我设置的日志格式是否生效")
-
-	conn, err := grpc.Dial("127.0.0.1:9090", grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		logx.Errorf("ddddddddddddddddddd")
-	}
-	defer conn.Close()
 
 	//读取rest http配置
 	server := rest.MustNewServer(c.RestConf)
