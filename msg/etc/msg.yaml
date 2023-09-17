@@ -13,7 +13,15 @@ Redis:
   Host: 127.0.0.1:6379
 
 Mysql:
-  Datasource: root:12345678@tcp(127.0.0.1:3306)/mall?charset=utf8mb4&parseTime=True&loc=Local
+  Datasource: root:123456@tcp(127.0.0.1:3306)/mall?charset=utf8mb4&parseTime=True&loc=Local
+
+Email:
+  Identity:
+  Addr: smtp.qq.com:25
+  Host: smtp.qq.com
+  Username: 2459212504@qq.com
+  Password: xupzhvrwiunxdijb
+  From: 2459212504@qq.com
 
 #kq
 KqConsumerConf:

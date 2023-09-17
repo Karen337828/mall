@@ -37,7 +37,7 @@ func main() {
 	ctx := svc.NewServiceContext(c)
 	go initMQ(ctx, c)
 
-	task.InitTask()
+	go task.InitTask()
 
 	listen, _ := net.Listen("tcp", "127.0.0.1:9090")
 	grpcServer := grpc.NewServer()

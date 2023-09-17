@@ -45,7 +45,7 @@ func InitTask() {
 
 	}
 	// 定时任务,cron表达式,每10秒一次
-	spec := "*/ * * * * ?"
+	spec := "*/10 * * * * ?"
 	// 添加定时任务
 	cronTab.AddFunc(spec, task)
 	// 启动定时器
@@ -59,7 +59,7 @@ func doSendMsg(message msgmodel.Message) int {
 
 		e := email.NewEmail()
 		//设置发送方的邮箱
-		e.From = "2459212504@qq.com"
+		e.From = config.Conf.Email.From
 		// 设置接收方的邮箱
 		e.To = []string{message.Email}
 
@@ -77,7 +77,8 @@ func doSendMsg(message msgmodel.Message) int {
 		}
 
 		//设置服务器相关的配置
-		err := e.Send("smtp.qq.com:25", smtp.PlainAuth("", "2459212504@qq.com", "xupzhvrwiunxdijb", "smtp.qq.com"))
+		err := e.Send(config.Conf.Email.Addr, smtp.PlainAuth(
+			config.Conf.Email.Identity, config.Conf.Email.Username, config.Conf.Email.Password, config.Conf.Email.Host))
 		if err != nil {
 			logx.Infov("发送邮件失败，请检查邮件服务器配置是否正确！")
 			return 2

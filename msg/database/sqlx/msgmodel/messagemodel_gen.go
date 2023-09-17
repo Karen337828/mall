@@ -87,11 +87,11 @@ func (m *defaultMessageModel) FindOne(ctx context.Context, id int64) (*Message, 
 
 func (m *defaultMessageModel) FindList(ctx context.Context) (*[]Message, error) {
 	query := fmt.Sprintf("select %s from %s where `status` = 0 limit 100", messageRows, m.table)
-	var resp *[]Message
-	err := m.conn.QueryRowCtx(ctx, &resp, query)
+	var resp []Message
+	err := m.conn.QueryRowsCtx(ctx, &resp, query)
 	switch err {
 	case nil:
-		return resp, nil
+		return &resp, nil
 	case sqlc.ErrNotFound:
 		return nil, nil
 	default:
